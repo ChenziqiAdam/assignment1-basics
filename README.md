@@ -48,3 +48,26 @@ gunzip owt_valid.txt.gz
 cd ..
 ```
 
+## Training
+
+To run the full training pipeline, which includes tokenizer training, data preparation, and model training:
+
+```bash
+uv run python3 -m cs336_basics.run_training
+```
+
+This will:
+1.  Train a BPE tokenizer on the TinyStories dataset.
+2.  Initialize a 6-layer Transformer model with RoPE, RMSNorm, and SwiGLU.
+3.  Train for 5 epochs and save the final model to `transformer_final.pt`.
+
+## Evaluation & Generation
+
+Once you have a trained model, you can evaluate it by generating text from a prompt:
+
+```bash
+uv run python3 -m cs336_basics.eval --prompt "Once upon a time, there was a little" --model transformer_final.pt
+```
+
+For more details on the architecture and individual components, see [cs336_basics/README.md](./cs336_basics/README.md).
+
