@@ -15362,6 +15362,6 @@
     ]
   ],
   "special_tokens": {
-    "<|endoftext|>": 4352
+    "<|endoftext|>": 4096
   }
 }

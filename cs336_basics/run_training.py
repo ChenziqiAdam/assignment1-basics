@@ -20,7 +20,7 @@ def main():
         print("--- Training Tokenizer ---")
         stream_to_file(max_samples=10000, path=raw_path)
         vocab = build_vocab_parallel(raw_path, num_workers=4)
-        special_tokens = {"<|endoftext|>": 256 + VOCAB_SIZE}
+        special_tokens = {"<|endoftext|>": VOCAB_SIZE}
         tokenizer = Tokenizer(vocab=vocab, merges=[], special_tokens=special_tokens)
         tokenizer.train(vocab_size=VOCAB_SIZE)
         tokenizer.save(merges_path)
@@ -38,8 +38,10 @@ def main():
 
     # 4. Initialize Model
     print("--- Initializing Model ---")
+    # Determine vocab size from tokenizer
+    max_token_id = max(tokenizer.id_to_bytes.keys())
     model_config = {
-        "vocab_size": 256 + len(tokenizer.merges) + 1, # +1 for special token
+        "vocab_size": max_token_id + 1,
         "d_model": 256,
         "num_heads": 8,
         "d_ff": 1024,
