@@ -41,7 +41,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluate the trained Transformer model.")
     parser.add_argument("--prompt", type=str, default="Once upon a time", help="Prompt for generation")
     parser.add_argument("--model", type=str, default="transformer_final.pt", help="Path to model checkpoint")
-    parser.add_argument("--merges", type=str, default="merges.json", help="Path to tokenizer merges")
+    parser.add_argument("--merges", type=str, default="cs336_basics/merges.json", help="Path to tokenizer merges")
     
     args = parser.parse_args()
     run_eval(args.prompt, args.model, args.merges)
