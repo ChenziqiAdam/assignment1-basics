@@ -71,6 +71,7 @@ def gradient_clipping(parameters, max_norm):
         for p in parameters:
             if p.grad is not None:
                 p.grad.data.mul_(clip_coef)
+    return total_norm
 
 def cross_entropy_loss(logits: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
     """Cross-entropy loss for language modeling."""

@@ -36,6 +36,12 @@ def main():
     data_tensor = torch.tensor(tokens, dtype=torch.long)
     print(f"Dataset size: {len(data_tensor):,} tokens")
 
+    # Split into train and validation (90/10 split)
+    n = int(0.9 * len(data_tensor))
+    train_data = data_tensor[:n]
+    val_data = data_tensor[n:]
+    print(f"Train size: {len(train_data):,}, Val size: {len(val_data):,}")
+
     # 4. Initialize Model
     print("--- Initializing Model ---")
     # Determine vocab size from tokenizer
@@ -59,6 +65,7 @@ def main():
     num_epochs = 5
     warmup_steps = 500
     log_interval = 100
+    eval_interval = 500
     log_path = "training.log"
 
     # Log full configuration
@@ -72,7 +79,8 @@ def main():
         f"Initial LR: 5e-4\n"
         f"Weight Decay: 0.1\n"
         f"Warmup Steps: {warmup_steps}\n"
-        f"Dataset Size: {len(data_tensor):,} tokens\n"
+        f"Train Size: {len(train_data):,} tokens\n"
+        f"Val Size: {len(val_data):,} tokens\n"
         f"------------------------"
     )
     print(config_msg)
@@ -83,9 +91,12 @@ def main():
         model=model,
         optimizer=optimizer,
         data_loader_fn=data_loading,
-        data_args=(data_tensor, batch_size, context_length),
+        data_args=(train_data, batch_size, context_length),
         num_epochs=num_epochs,
         device=device,
+        val_loader_fn=data_loading,
+        val_args=(val_data, batch_size, context_length),
+        eval_interval=eval_interval,
         warmup_steps=warmup_steps,
         log_interval=log_interval,
         log_path=log_path
